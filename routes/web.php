@@ -17,19 +17,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Products Rotası
 Route::get('/products', [ProductController::class, 'index'])->name('products');
-Route::post('/products', [ProductController::class, 'store']);
+Route::post('/products/add', [ProductController::class, 'store'])->name('products.store');
 
-Route::middleware('auth')->get('/carts', [CartController::class, 'index'])->name('carts');
-Route::post('/carts', [CartController::class, 'store']);
-Route::delete('/carts/{id}', [CartController::class, 'destroy'])->name('carts.destroy');
-Route::put('/carts/{id}', [CartController::class, 'update'])->name('carts.update');
+//Carts Rotası
+Route::middleware('auth')->group(function() {
+    Route::get('/carts', [CartController::class, 'index'])->name('carts');
+    Route::post('/carts/add', [CartController::class, 'store'])->name('carts.store');
+    Route::delete('/carts/delete/{id}', [CartController::class, 'destroy'])->name('carts.destroy');
+    Route::put('/carts/update/{id}', [CartController::class, 'update'])->name('carts.update');
+});
 
-
-Route::middleware('auth')->get('/orders', [OrderController::class, 'index'])->name('orders');
-Route::post('/orders/{id}', [OrderController::class, 'update'])->name('orders.approve');
-Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
-
+//Orders Rotası
+Route::middleware('auth')->group(function() {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+    Route::post('/orders/add/{id}', [OrderController::class, 'update'])->name('orders.update');
+    Route::delete('/orders/delete/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
+});
 
 Route::get('/', function () {
     return view('welcome');

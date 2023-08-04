@@ -53,26 +53,26 @@
                   <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/13.webp" class="img-fluid" style="width: 150px;" alt="Generic placeholder image">
                   </th>
                   <td class="align-middle">
-                  <span class="ms-2">{{$order->product->urunAd}}</span>
+                  <span class="ms-2">{{$order->product->productName}}</span>
                   </td>
                   <td class="align-middle">
-                  <span class="ms-2">{{$order->adet}}</span>
+                  <span class="ms-2">{{$order->productQuantity}}</span>
                   </td>
                   <td class="align-middle">
-                  <span class="ms-2">{{$order->ad}}</span>
+                  <span class="ms-2">{{$order->name}}</span>
                   </td>
                   <td class="align-middle">
-                  <span class="ms-2">{{$order->soyad}}</span>
+                  <span class="ms-2">{{$order->surname}}</span>
                   </td>
                   <td class="align-middle">
                   <span class="ms-2">{{$order->email}}</span>
                   </td>
                   <td class="align-middle">
-                  <span class="ms-2">{{$order->telefon}}</span>
+                  <span class="ms-2">{{$order->phone}}</span>
                   </td>
                   @if(auth()->user()->role_id  === 1) 
                   <td class="align-middle">
-                  <form class="mb-5" action="{{ url('/orders', $order->id) }}" method="POST">
+                  <form class="mb-5" action="{{ url('/orders/add', $order->id) }}" method="POST">
                   @csrf
                   @method('POST')
                   <button type="submit" class="btn btn-green btn-block btn-lg">Onayla</button>
@@ -85,7 +85,7 @@
                   </form>
                  @else
                   <td class="align-middle">
-                  <span class="ms-2">{{$order->durum}}</span>
+                  <span class="ms-2">{{$order->status}}</span>
                   </td>
                  @endif
                 </tr>

@@ -20,21 +20,18 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        
         $user = auth()->user();
         if(auth()->user()){
-            // Yeni bir ürün oluşturma işlemi
             $product_id = $request->input('product_id');
             $quantity = $request->input('quantity');
             $cart = new Cart();
             $cart->product_id = $product_id;
             $cart->user_id = $user->id;
-
+            $cart->quantity = $quantity;
+            $cart->save();
         }else{
             return redirect()->route('products')->with('error', "Ürünü Sepetinize Ekleyebilmeniz İçin Giriş Yapmanız Gerekmektedir!");
         }
-        $cart->quantity = $quantity;
-        $cart->save();
 
         return redirect()->route('products')->with('success', "Ürün Sepetinize Eklendi");
     }

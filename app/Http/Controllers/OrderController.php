@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendSmsJob;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Twilio\Rest\Client;
@@ -15,11 +16,10 @@ class OrderController extends Controller
 
     public function index()
     {
-        $user = Auth::user();
         if (auth()->check() && auth()->user()->role_id === 1) {
-            $orders = Order::with('product')->where('durum', 'Pending')->get();
+            $orders = Order::with('product')->where('status', 'Pending')->get();
         }else{
-            $orders = Order::with('product')->where('durum', 'Pending')->where('user_id', auth()->id())->get();
+            $orders = Order::with('product')->where('status', 'Pending')->where('user_id', auth()->id())->get();
         }
         return view('orders', compact('orders'));
     }
@@ -32,34 +32,26 @@ class OrderController extends Controller
     {
     }
 
-    public function update($id)
+    public function update($id) //admin siparişi onayladıktan sonra
     {
         $order = Order::findOrFail($id);
-        $order->durum = 'approved';
+        $order->status = 'approved';
         $order->save();
 
         $message = $order->id . " nolu siparişiniz onaylandı. Bizi tercih ettiğiniz için teşekkür ederiz!";
-    
 
-        // Twilio'yu kullanarak SMS gönderimi
-        $twilio = new Client(env('TWILIO_SID'), env('TWILIO_AUTH_TOKEN'));
-        $twilio->messages->create(
-            "+9".$order->telefon, // Sipariş sahibinin telefon numarası
-            [
-                'from' => env('TWILIO_NUMBER'),
-                'body' => $message
-            ]
-        );
+        //Api ve Web uygulaması için oluşturulmuş iş sınıfın ve kuyruğa eklenmesi
+        SendSmsJob::dispatch($order->phone, $message);
     
-        return redirect()->route('orders')->with('success', 'Sipariş onaylandı.');
+        return redirect()->route('orders')->with('success', 'Siparişiniz onaylandı.');
     }
 
     public function checkValidity()
     {
-        $expiredOrders = Order::where('durum', 'Pending')->where('valid_until', '<', now())->get();
+        $expiredOrders = Order::where('status', 'Pending')->where('valid_until', '<', now())->get();
 
         foreach ($expiredOrders as $order) {
-            $order->durum = "autoRejected";
+            $order->status = "autoRejected";
             $order->save();
         }
     }

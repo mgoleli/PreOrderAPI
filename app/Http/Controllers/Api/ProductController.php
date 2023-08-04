@@ -17,4 +17,15 @@ class ProductController extends Controller
         ]);
     }
 
+    public function store(Request $request){
+        $product = new Product();
+        $product->productName = $request->input('urunAd');
+        $product->productPrice = $request->input('urunFiyat');
+        $product->productQuantity = $request->input('urunMiktar');
+        $product->save();
+
+        return response()->json([
+            'success' => "Ürün ekleme Başarılı"
+        ]);
+    }
 }

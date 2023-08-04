@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Anamakine: 127.0.0.1
--- Üretim Zamanı: 25 Haz 2023, 20:46:06
+-- Üretim Zamanı: 04 Ağu 2023, 21:34:12
 -- Sunucu sürümü: 10.4.22-MariaDB
 -- PHP Sürümü: 7.4.28
 
@@ -55,6 +55,22 @@ CREATE TABLE `failed_jobs` (
 -- --------------------------------------------------------
 
 --
+-- Tablo için tablo yapısı `jobs`
+--
+
+CREATE TABLE `jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attempts` tinyint(3) UNSIGNED NOT NULL,
+  `reserved_at` int(10) UNSIGNED DEFAULT NULL,
+  `available_at` int(10) UNSIGNED NOT NULL,
+  `created_at` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Tablo için tablo yapısı `migrations`
 --
 
@@ -69,17 +85,18 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1, '2014_10_12_000000_create_users_table', 1),
-(2, '2014_10_12_100000_create_password_resets_table', 1),
-(3, '2019_08_19_000000_create_failed_jobs_table', 1),
-(4, '2019_12_14_000001_create_personal_access_tokens_table', 1),
-(5, '2023_06_22_160001_create_products_table', 1),
-(6, '2023_06_22_160002_create_carts_table', 1),
-(7, '2023_06_22_160003_create_orders_table', 1),
-(8, '2023_06_24_122840_add_role_id_to_users_table', 1),
-(9, '2023_06_24_134908_add_user_id_to_carts_table', 1),
-(10, '2023_06_24_190533_add_user_id_to_orders_table', 1),
-(11, '2023_06_24_215355_add_valid_until_to_orders', 1);
+(61, '2014_10_12_000000_create_users_table', 1),
+(62, '2014_10_12_100000_create_password_resets_table', 1),
+(63, '2019_08_19_000000_create_failed_jobs_table', 1),
+(64, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+(65, '2023_06_22_160001_create_products_table', 1),
+(66, '2023_06_22_160002_create_carts_table', 1),
+(67, '2023_06_22_160003_create_orders_table', 1),
+(68, '2023_06_24_122840_add_role_id_to_users_table', 1),
+(69, '2023_06_24_134908_add_user_id_to_carts_table', 1),
+(70, '2023_06_24_190533_add_user_id_to_orders_table', 1),
+(71, '2023_06_24_215355_add_valid_until_to_orders', 1),
+(72, '2023_07_21_143029_create_jobs_table', 1);
 
 -- --------------------------------------------------------
 
@@ -91,10 +108,12 @@ CREATE TABLE `orders` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED DEFAULT NULL,
   `product_id` bigint(20) UNSIGNED NOT NULL,
-  `ad` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `soyad` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `surname` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `telefon` int(11) NOT NULL,
+  `phone` varchar(13) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(11) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `quantity` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `valid_until` timestamp NULL DEFAULT NULL
@@ -138,9 +157,9 @@ CREATE TABLE `personal_access_tokens` (
 
 CREATE TABLE `products` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `urunAd` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `urunFiyat` double(8,2) NOT NULL,
-  `urunMiktar` int(11) NOT NULL,
+  `productName` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productPrice` double(8,2) NOT NULL,
+  `productQuantity` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -180,6 +199,13 @@ ALTER TABLE `carts`
 ALTER TABLE `failed_jobs`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
+
+--
+-- Tablo için indeksler `jobs`
+--
+ALTER TABLE `jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `jobs_queue_index` (`queue`);
 
 --
 -- Tablo için indeksler `migrations`
@@ -229,7 +255,7 @@ ALTER TABLE `users`
 -- Tablo için AUTO_INCREMENT değeri `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `failed_jobs`
@@ -238,16 +264,22 @@ ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- Tablo için AUTO_INCREMENT değeri `jobs`
+--
+ALTER TABLE `jobs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- Tablo için AUTO_INCREMENT değeri `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `personal_access_tokens`
@@ -259,13 +291,13 @@ ALTER TABLE `personal_access_tokens`
 -- Tablo için AUTO_INCREMENT değeri `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Dökümü yapılmış tablolar için kısıtlamalar

@@ -11,6 +11,16 @@ class cartAndOrderTest extends TestCase
      *
      * @return void
      */
+
+    public function test_add_products(){
+        $response = $this->call('POST', '/products/add', [
+            'urunAd' => "test",
+            'urunFiyat' => 100,
+            'urunMiktar' => 11
+        ]);
+
+        $response->assertStatus($response->status(), 200);
+    }
     public function test_get_item_to_cart()
     {
         $response = $this->call('GET', '/carts/{id}', [

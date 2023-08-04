@@ -98,7 +98,7 @@
                     <a href="{{ url('/login') }}">Üye Olmak İçin Tıklayın </a>
                 </div>
                 @endif
-                <form action="{{ url('/products') }}" method="POST">
+                <form action="{{ url('/products/add') }}" method="POST">
                     @csrf
                     @foreach ($products as $product)
                     <div class="col-md-12 col-lg-4 mb-4 mb-lg-0">
@@ -118,17 +118,17 @@
                                 </div>
 
                                 <div class="d-flex justify-content-between mb-3">
-                                    <h5 class="mb-0">{{$product->urunAd}}</h5>
-                                    <h5 class="text-dark mb-0">{{$product->urunFiyat}}</h5>
+                                    <h5 class="mb-0">{{$product->productName}}</h5>
+                                    <h5 class="text-dark mb-0">{{$product->productPrice}}</h5>
                                 </div>
                                 <div class="input-group">
                                     <input type="button" value="-" class="button-minus" data-field="quantity">
-                                    <input type="number" min="1" max="{{$product->urunMiktar}}" value="1" name="quantity" class="quantity-field">
+                                    <input type="number" min="1" max="{{$product->productQuantity}}" value="1" name="quantity" class="quantity-field">
                                     <input type="button" value="+" class="button-plus" data-field="quantity">
                                 </div>
 
                                 <div class="d-flex justify-content-between mb-2">
-                                    <p class="text-muted mb-0">Uygun: <span class="fw-bold">{{$product->urunMiktar}}</span></p>
+                                    <p class="text-muted mb-0">Uygun: <span class="fw-bold">{{$product->productQuantity}}</span></p>
                                     <div class="ms-auto text-warning">
                                         <i class="fa fa-star"></i>
                                         <i class="fa fa-star"></i>

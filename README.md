@@ -1,6 +1,7 @@
 ## PreOrderApi
 
-PreOrderApi, kullanıcıların ürünleri sepete ekleyebildiği ve ön sipariş talebinde bulunabildiği bir Laravel projesidir. Bu projede aşağıdaki özellikler bulunmaktadır:
+PreOrderApi, kullanıcıların ürünleri sepete ekleyebildiği ve ön sipariş talebinde bulunabildiği hem bir API hem de bir Web Laravel projesidir. Bu projede aşağıdaki özellikler bulunmaktadır:
+
 
 - Kullanıcılar, ürün havuzundan seçtikleri ürünleri sepete ekleyebilirler.
 - Sepete eklenen ürünlerin adedi seçilebilir ve güncellenebilir.
@@ -16,9 +17,13 @@ PreOrderApi, kullanıcıların ürünleri sepete ekleyebildiği ve ön sipariş 
 - Geçerlilik süresi 1 günü geçmiş olan siparişler otomatik olarak "autoreject" durumuna güncellenir.
 - Laravel Schedule Tasks görev tanımlayıcı özelliği kullanılarak otomatik görevler planlanır.
 - Sepete ekleme, güncelleme, silme ve listeleme gibi işlemler için uygun API endpoint'leri bulunur.
-- Proje PHPUnit kullanılarak test edilmiştir.
-- Twilio ile SMS gönderimi için bölge izni verilerek gerçekleştirilmiştir.
+- Laravelin kuyruk yönetim sistemi kullanılır. Sipariş sonrası kullanıcıya hemen yanıt döner ve Sms gönderim işlemi için       oluşturulan iş, kuyruğa eklenir ve daha sonra işlenir. (Kuyruk sürücüsü => Database)
+- Telefon numarasından siparişin hangi ülkeden verildiği belirlenip o ülkeye ait uygun olan Sms servisi devreye girer.
+(Sms servisleri için Design Pattern - Factory Pattern kullanıldı)
+- Hataların merkezi bir yerden yönetimini sağlanmıştır. (ErrorHandler sınıfı)
+- Api üzerinden gelen isteklerde JWT(Json Web Token) doğrulaması eklendi.
 - Uygulama kullanılan veritabanı anadizinde preoderapi.sql adında bulunur.
+- Proje PHPUnit kullanılarak test edilmiştir. (tests/Unit/cartAndOrderTest.php)
   
 `    TWILIO_SID="AC1572af8c78c7fbca979f0a36ba1132c9"
     TWILIO_AUTH_TOKEN="7af156e0ee7bc614bf1fa129da5a8628"

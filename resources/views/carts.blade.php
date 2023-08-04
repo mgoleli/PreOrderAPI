@@ -234,11 +234,11 @@
                   <form class="mb-5 d-inline-block" action="{{ route('carts.update', $cart->id) }}" method="POST">
                     @csrf
                     @method('PUT')
-                    <input type="number" min="1" max= "{{$cart->product->urunMiktar}}" class="count" name="qty[{{$cart->id}}]" value="{{$cart->quantity}}">
+                    <input type="number" min="1" max= "{{$cart->product->productQuantity}}" class="count" name="qty[{{$cart->id}}]" value="{{$cart->quantity}}">
 
                     <button type="submit" class="btn btn-primary"><i class="bi-trash"></i>Güncelle</button>
                   </form>
-                  <form class="mb-5" action="{{ url('/carts') }}" method="POST">
+                  <form class="mb-5" action="{{ url('/carts/add') }}" method="POST">
                     @csrf
                     <div class="d-flex align-items-center mb-5">
                       <div class="flex-shrink-0">
@@ -246,7 +246,8 @@
                       </div>
                       <div class="flex-grow-1 ms-3">
                         <a href="#!" class="float-end text-black"><i class="fas fa-times"></i></a>
-                        <input type="hidden" name="items[]" value="{{ $cart->product_id }}">
+                        <input type="hidden" min="1" max="{{$cart->product->productQuantity}}" class="count" name="items[{{$loop->index}}][quantity]" value="{{$cart->quantity}}">
+                        <input type="hidden" name="items[{{$loop->index}}][productId]" value="{{ $cart->product_id }}">
                         <h5 class="text-primary">{{$cart->product->urunAd}}</h5>
                         <h6 style="color: #9e9e9e;">Color: white</h6>
                         <div class="d-flex align-items-center">

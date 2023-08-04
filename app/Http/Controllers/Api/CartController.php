@@ -18,12 +18,12 @@ class CartController extends Controller
     public function store(Request $request){
         $product_id = $request->input('product_id');
         $quantity = $request->input('quantity');
+        $user_id = $request->input('user_id');
 
         $cartItem = new Cart();
         $cartItem->product_id = $product_id;
         $cartItem->quantity = $quantity;
-        $user = auth()->user();
-        $cartItem->user_id = 1; 
+        $cartItem->user_id = $user_id; 
         $cartItem->save();
     
         return response()->json([
@@ -34,7 +34,6 @@ class CartController extends Controller
     public function update(Request $request, $id)
     {
         $quantity = $request->input('quantity');
-        $product_id = $request->input('product_id');
         $user_id = $request->input('user_id');
 
         $cart = Cart::findOrFail($id);
