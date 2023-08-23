@@ -10,8 +10,8 @@ use Tymon\JWTAuth\Http\Middleware\Authenticate;
 
     //JWT kimlik doğrulaması uygulandı
     Route::middleware([Authenticate::class])->group(function (){
-        Route::get('/products', [ProductController::class, 'index'])->name('api.products');
         Route::post('/products/add', [ProductController::class, 'store'])->name('api.products.add');
+        Route::get('/products', [ProductController::class, 'index'])->name('api.products');
         
         Route::get('/carts/{id}', [CartController::class, 'index'])->name('api.carts');
         Route::post('/carts/add', [CartController::class, 'store'])->name('api.carts.store');
